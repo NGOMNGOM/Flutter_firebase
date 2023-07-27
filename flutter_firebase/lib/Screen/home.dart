@@ -17,23 +17,29 @@ class _HomeState extends State<Home> {
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
-        child: Column(
-          children: [
-            SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  icon: Icon(Icons.app_registration),
-                  label: Text("Registration"),
-                  onPressed: () {},
-                )),
-            SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  icon: Icon(Icons.login),
-                  label: Text("Login"),
-                  onPressed: () {},
-                ))
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Image.asset(
+                "asset/image/logo.webp",
+                scale: 5,
+              ),
+              SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.app_registration),
+                    label: Text("Registration"),
+                    onPressed: () {},
+                  )),
+              SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.login),
+                    label: Text("Login"),
+                    onPressed: () {},
+                  )),
+            ],
+          ),
         ),
       ),
     );
