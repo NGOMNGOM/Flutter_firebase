@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/Model/profile.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -36,12 +37,10 @@ class _RegisterState extends State<Register> {
                     onSaved: (String? email) {
                       profile.email = email;
                     },
-                    validator: (String? email) {
-                      if (email!.isEmpty) {
-                        return "Please Input";
-                      }
-                      return null;
-                    },
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: "Please Input Email"),
+                      EmailValidator(errorText: "Wrong Email Format")
+                    ]),
                   ),
                   const SizedBox(
                     height: 15,
@@ -56,12 +55,8 @@ class _RegisterState extends State<Register> {
                       onSaved: (String? password) {
                         profile.pwd = password;
                       },
-                      validator: (String? pwd) {
-                        if (pwd!.isEmpty) {
-                          return "Please Input";
-                        }
-                        return null;
-                      }),
+                      validator: RequiredValidator(
+                          errorText: "Please Input Password")),
                   const SizedBox(
                     height: 15,
                   ),
