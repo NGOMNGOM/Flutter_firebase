@@ -36,8 +36,8 @@ class _RegisterState extends State<Register> {
                     onSaved: (String? email) {
                       profile.email = email;
                     },
-                    validator: (String? input) {
-                      if (input!.isEmpty) {
+                    validator: (String? email) {
+                      if (email!.isEmpty) {
                         return "Please Input";
                       }
                       return null;
@@ -51,12 +51,17 @@ class _RegisterState extends State<Register> {
                     style: TextStyle(fontSize: 20),
                   ),
                   TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(labelText: "Password"),
-                    onSaved: (String? password) {
-                      profile.pwd = password;
-                    },
-                  ),
+                      obscureText: true,
+                      decoration: InputDecoration(labelText: "Password"),
+                      onSaved: (String? password) {
+                        profile.pwd = password;
+                      },
+                      validator: (String? pwd) {
+                        if (pwd!.isEmpty) {
+                          return "Please Input";
+                        }
+                        return null;
+                      }),
                   const SizedBox(
                     height: 15,
                   ),
@@ -64,7 +69,12 @@ class _RegisterState extends State<Register> {
                       width: double.infinity,
                       child: ElevatedButton(
                           onPressed: () {
-                            formKey.currentState?.save();
+                            if (formKey.currentState!.validate()) {
+                              formKey.currentState?.save();
+                              formKey.currentState?.reset();
+                              print(
+                                  "Email = ${profile.email}, password = ${profile.pwd}");
+                            }
                           },
                           child: const Text(
                             "Submit",
