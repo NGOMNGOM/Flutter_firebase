@@ -16,6 +16,5 @@ class _LoginState extends State<Login> {
       ),
       body: Text("Login Screen"),
     );
-    ;
   }
 }
