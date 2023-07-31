@@ -89,20 +89,24 @@ class _RegisterState extends State<Register> {
                                         await FirebaseAuth.instance
                                             .createUserWithEmailAndPassword(
                                                 email: profile.email,
-                                                password: profile.pwd);
-                                        Fluttertoast.showToast(
-                                            msg: "Register complete!",
-                                            gravity: ToastGravity.CENTER);
-                                        formKey.currentState?.reset();
-                                        // ignore: use_build_context_synchronously
-                                        Navigator.pushReplacement(context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                          return const Home();
-                                        }));
+                                                password: profile.pwd)
+                                            .then((value) {
+                                          Fluttertoast.showToast(
+                                              msg: "Register complete!",
+                                              gravity: ToastGravity.CENTER);
+                                          formKey.currentState?.reset();
+                                          // ignore: use_build_context_synchronously
+                                          Navigator.pushReplacement(context,
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return const Home();
+                                          }));
+                                        });
+
                                         // Navigator.pop(context);
                                       } on FirebaseAuthException catch (e) {
                                         // มีสอง error email ซ้ำ หรือ รหัสสั้น
+                                        print(e.code);
                                         Fluttertoast.showToast(
                                             msg: e.message ?? "",
                                             gravity: ToastGravity.CENTER);

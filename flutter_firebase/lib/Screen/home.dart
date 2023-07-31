@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
                     icon: Icon(Icons.app_registration),
                     label: Text("Registration"),
                     onPressed: () {
-                      Navigator.push(context,
+                      Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) {
                         return Register();
                       }));
@@ -44,7 +44,7 @@ class _HomeState extends State<Home> {
                     icon: Icon(Icons.login),
                     label: Text("Login"),
                     onPressed: () {
-                      Navigator.push(context,
+                      Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) {
                         return Login();
                       }));
