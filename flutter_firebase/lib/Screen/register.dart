@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/Model/profile.dart';
+import 'package:flutter_firebase/Screen/home.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
 class Register extends StatefulWidget {
@@ -12,7 +15,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   var formKey = GlobalKey<FormState>();
-  var profile = Profile();
+  var profile = Profile(email: "", pwd: "");
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
 
   @override
@@ -47,7 +50,7 @@ class _RegisterState extends State<Register> {
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(labelText: "Email"),
                             onSaved: (String? email) {
-                              profile.email = email;
+                              profile.email = email ?? "";
                             },
                             validator: MultiValidator([
                               RequiredValidator(
@@ -67,7 +70,7 @@ class _RegisterState extends State<Register> {
                               decoration:
                                   InputDecoration(labelText: "Password"),
                               onSaved: (String? password) {
-                                profile.pwd = password;
+                                profile.pwd = password ?? "";
                               },
                               validator: RequiredValidator(
                                   errorText: "Please Input Password")),
@@ -77,12 +80,33 @@ class _RegisterState extends State<Register> {
                           SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    // ต้องเป็น async + await เพราะว่าต้องรอการลงทะเบียนให้เสร็จ
                                     if (formKey.currentState!.validate()) {
                                       formKey.currentState?.save();
-                                      formKey.currentState?.reset();
-                                      print(
-                                          "Email = ${profile.email}, password = ${profile.pwd}");
+
+                                      try {
+                                        await FirebaseAuth.instance
+                                            .createUserWithEmailAndPassword(
+                                                email: profile.email,
+                                                password: profile.pwd);
+                                        Fluttertoast.showToast(
+                                            msg: "Register complete!",
+                                            gravity: ToastGravity.CENTER);
+                                        formKey.currentState?.reset();
+                                        // ignore: use_build_context_synchronously
+                                        Navigator.pushReplacement(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return const Home();
+                                        }));
+                                        // Navigator.pop(context);
+                                      } on FirebaseAuthException catch (e) {
+                                        // มีสอง error email ซ้ำ หรือ รหัสสั้น
+                                        Fluttertoast.showToast(
+                                            msg: e.message ?? "",
+                                            gravity: ToastGravity.CENTER);
+                                      }
                                     }
                                   },
                                   child: const Text(
