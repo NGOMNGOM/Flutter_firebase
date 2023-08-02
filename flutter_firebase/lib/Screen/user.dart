@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/Screen/login.dart';
+
+import 'home.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -22,7 +25,18 @@ class _UserScreenState extends State<UserScreen> {
                 Text(
                   auth.currentUser!.email ?? "",
                   style: TextStyle(fontSize: 20),
-                )
+                ),
+                ElevatedButton.icon(
+                    onPressed: () {
+                      auth.signOut().then((value) {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return Home();
+                        }));
+                      });
+                    },
+                    icon: Icon(Icons.logout),
+                    label: Text("Logout"))
               ],
             ),
           ),
